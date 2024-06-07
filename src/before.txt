@@ -1,0 +1,255 @@
+<template>
+  <div id="contenedor">
+
+    <div id="buscador">
+    <input id="cajaDeTexto" type="text" placeholder="Ingrese el nombre o numero del pokemon" v-model="id"/>
+
+    <button @click="traerInformacion">Buscar</button>
+</div>
+    <img :src="imgPokemon" alt="" />
+
+    <div id="fichaDelPokemon">
+    <h1>{{ "#" + numeroPokemon }}</h1>
+    <h1>{{ "Nombre: " + nombreDelPokemon }}</h1>
+    <h1>{{ "Peso: " + pesoDelPokemon }}</h1>
+    <h1>{{ "Altura: " + alturaDelPokemon }}</h1>
+    <h1>{{ "Categoría: " + categoriaDelPokemon }}</h1>
+    <h1>{{ "Categoría 2: " + categoria2DelPokemon }}</h1>
+</div>
+    <div id="estadisticas">
+      <h1>Estadisticas</h1>
+
+<h1>{{ "HP: " + hpDelPokemon }}</h1>      
+  <div class="q-pa-md flex flex-center">
+    <q-circular-progress
+      show-value
+      font-size="25px"
+      :value="maximoDeProgresoCircular(hpDelPokemon)"
+      size="100px"
+      :thickness="0.22"
+      color="light-blue"
+      track-color="transparent"
+      class="q-ma-md"
+    >
+      {{ hpDelPokemon }}
+    </q-circular-progress>
+  </div>
+
+
+<h1>{{ "Ataque: " + ataqueDelPokemon }}</h1>
+    <div class="q-pa-md flex flex-center">
+    <q-circular-progress
+      show-value
+      font-size="25px"
+      :value="maximoDeProgresoCircular(ataqueDelPokemon)"
+      size="100px"
+      :thickness="0.22"
+      color="light-blue"
+      track-color="transparent"
+      class="q-ma-md"
+    >
+      {{ ataqueDelPokemon }}
+    </q-circular-progress>
+  </div>
+
+
+<h1>{{ "Defensa: " + defensaDelPokemon }}</h1>
+    <div class="q-pa-md flex flex-center">
+    <q-circular-progress
+      show-value
+      font-size="25px"
+      :value="maximoDeProgresoCircular(defensaDelPokemon)"
+      size="100px"
+      :thickness="0.22"
+      color="light-blue"
+      track-color="transparent"
+      class="q-ma-md"
+    >
+      {{ defensaDelPokemon }}
+    </q-circular-progress>
+  </div>
+
+
+<h1>{{ "Ataque Especial: " + ataqueEspecialDelPokemon }}</h1>
+    <div class="q-pa-md flex flex-center">
+    <q-circular-progress
+      show-value
+      font-size="25px"
+      :value="maximoDeProgresoCircular(ataqueEspecialDelPokemon)"
+      size="100px"
+      :thickness="0.22"
+      color="light-blue"
+      track-color="transparent"
+      class="q-ma-md"
+    >
+      {{ ataqueEspecialDelPokemon }}
+    </q-circular-progress>
+  </div>
+
+
+<h1>{{ "Defensa Especial: " + defensaEspecialDelPokemon }}</h1>
+    <div class="q-pa-md flex flex-center">
+    <q-circular-progress
+      show-value
+      font-size="25px"
+      :value="maximoDeProgresoCircular(defensaEspecialDelPokemon)"
+      size="100px"
+      :thickness="0.22"
+      color="light-blue"
+      track-color="transparent"
+      class="q-ma-md"
+    >
+      {{ defensaEspecialDelPokemon }}
+    </q-circular-progress>
+  </div>
+
+<h1>{{ "Velocidad: " + velocidadDelPokemon }}</h1>
+    <div class="q-pa-md flex flex-center">
+    <q-circular-progress
+      show-value
+      font-size="25px"
+      :value="maximoDeProgresoCircular(velocidadDelPokemon)"
+      size="100px"
+      :thickness="0.22"
+      color="light-blue"
+      track-color="transparent"
+      class="q-ma-md"
+    >
+      {{ velocidadDelPokemon }}
+    </q-circular-progress>
+  </div>
+      
+    </div>
+
+  </div>
+</template>
+
+<script setup>
+import axios from "axios";
+import { ref } from "vue";
+
+let id = ref("");
+let imgPokemon = ref("");
+let numeroPokemon = ref("");
+let nombreDelPokemon = ref("");
+let pesoDelPokemon = ref("");
+let alturaDelPokemon = ref("");
+let categoriaDelPokemon = ref("");
+let categoria2DelPokemon = ref("");
+let habilidadesDelPokemon = ref("");
+let hpDelPokemon = ref("");
+let ataqueDelPokemon = ref("");
+let defensaDelPokemon = ref("");
+let ataqueEspecialDelPokemon = ref("");
+let defensaEspecialDelPokemon = ref("");
+let velocidadDelPokemon = ref("");
+
+
+
+async function traerInformacion() {
+  let url = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id.value}`);
+  let data = url.data;
+  imgPokemon.value = url.data.sprites.other["official-artwork"].front_default;
+  nombreDelPokemon.value = url.data.species.name;
+  numeroPokemon.value = url.data.id;
+  pesoDelPokemon.value = url.data.weight;
+  alturaDelPokemon.value = url.data.height;
+  categoriaDelPokemon.value = url.data.types["0"].type.name;
+
+  if (data.types.lenght > 1) {
+    categoria2DelPokemon.value = url.data.types["1"].type.name;
+  }
+  hpDelPokemon.value = url.data.stats["0"].base_stat;
+  ataqueDelPokemon.value = url.data.stats["1"].base_stat;
+  defensaDelPokemon.value = url.data.stats["2"].base_stat;
+  ataqueEspecialDelPokemon.value = url.data.stats["3"].base_stat;
+  defensaEspecialDelPokemon.value = url.data.stats["4"].base_stat;
+  velocidadDelPokemon.value = url.data.stats["5"].base_stat;
+
+cambiarColorSegunTipoDePokemon()
+};
+
+function maximoDeProgresoCircular(value) {
+  return (value / 255) * 100;
+};
+
+
+// let colorSegunTipoDePokemonStyle = ref()
+let colorSegunTipoDePokemon = {
+  fire: "orange",
+  grass: "green",
+  water: "blue",
+  electric: "yellow",
+  ground: "brown",
+  poison: "purple",
+  rock: "gray",
+  bug: "brown",
+  dragon: "purple",
+  psychic: "pink",
+  ghost: "purple",
+  dark: "black",
+  steel: "gray",
+  fairy: "pink",
+  fighting: "red",
+  normal: "white",
+  ice: "blue",
+  flying: "yellow"
+  };
+
+let cambiarColorSegunTipoDePokemon = () => {
+  let color = colorSegunTipoDePokemon[categoriaDelPokemon.value];
+  document.body.style.backgroundColor = color;
+};
+
+</script>
+
+<style>
+#buscador{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3%;
+}
+
+#buscador input{
+  width: 40%;
+  border: 2px solid black;
+  border-radius: 20px;
+  font-size: 130%;
+  padding: .8%;
+}
+
+#buscador button{
+  border: 2px solid black;
+  border-radius: 20px;
+  font-size: 130%;
+}
+
+#fichaDelPokemon{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: white;
+
+}
+
+#estadisticas{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: white;
+}
+
+</style>
