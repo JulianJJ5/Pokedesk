@@ -3,7 +3,7 @@
     <img src="./../imagenes/fondo_pokemon.jpg" alt="background image" id="fondo" >
     <div id="contenedor">
       <div id="buscador">
-        <input id="cajaDeTexto" type="text" placeholder="Ingrese el nombre o numero del pokemon" v-model="id" />
+        <input @keyup.enter="traerInformacion" id="cajaDeTexto" type="text" placeholder="Ingrese el nombre o numero del pokemon" v-model="id" />
         <button @click="traerInformacion">Buscar</button>
       </div>
 
@@ -11,13 +11,14 @@
         <div id="primeraLineaDeInformacion">
     <div id="nombreDelPokemon"><h1 v-show="nombreDelPokemon">{{ nombreDelPokemon }}</h1>
 </div>
-
+<div id="categoriasDelPokemon">
     <div id="cajaDelTipoDePokemon" v-show="categoriaDelPokemon">
       {{ categoriaDelPokemon }}
 </div>
 
 <div id="cajaDelTipo2DePokemon" v-show="categoria2DelPokemon">
       {{ categoria2DelPokemon }}
+</div>
 </div>
       <h2 v-show="numeroPokemon">{{ "#" + numeroPokemon }}</h2>
   </div>
@@ -33,7 +34,7 @@
 
       <div id="contenedorEstadisticas">
         <div id="estadisticas">
-          <div class="q-pa-md flex flex-center">
+          <div class="q-pa-md flex flex-center" v-show="hpDelPokemon">
             <h1>HP: </h1>
             <q-circular-progress
               show-value
@@ -49,14 +50,14 @@
             </q-circular-progress>
           </div>
 
-          <div class="q-pa-md flex flex-center">
+          <div class="q-pa-md flex flex-center" v-show="ataqueDelPokemon">
             <h1>Ataque: </h1>
             <q-circular-progress
               show-value
               font-size="25px"
               :value="maximoDeProgresoCircular(ataqueDelPokemon)"
               size="100px"
-              :thickness="0.22"
+              :thickness="0.23"
               color="light-blue"
               track-color="transparent"
               class="q-ma-md"
@@ -65,14 +66,14 @@
             </q-circular-progress>
           </div>
 
-          <div class="q-pa-md flex flex-center">
+          <div class="q-pa-md flex flex-center" v-show="defensaDelPokemon">
             <h1>Defensa: </h1>
             <q-circular-progress
               show-value
               font-size="25px"
               :value="maximoDeProgresoCircular(defensaDelPokemon)"
               size="100px"
-              :thickness="0.22"
+              :thickness="0.23"
               color="light-blue"
               track-color="transparent"
               class="q-ma-md"
@@ -81,14 +82,14 @@
             </q-circular-progress>
           </div>
 
-          <div class="q-pa-md flex flex-center">
+          <div class="q-pa-md flex flex-center" v-show="ataqueEspecialDelPokemon">
             <h1>Ataque Especial: </h1>
             <q-circular-progress
               show-value
               font-size="25px"
               :value="maximoDeProgresoCircular(ataqueEspecialDelPokemon)"
               size="100px"
-              :thickness="0.22"
+              :thickness="0.23"
               color="light-blue"
               track-color="transparent"
               class="q-ma-md"
@@ -97,14 +98,14 @@
             </q-circular-progress>
           </div>
 
-          <div class="q-pa-md flex flex-center">
+          <div class="q-pa-md flex flex-center" v-show="defensaEspecialDelPokemon">
             <h1>Defensa Especial: </h1>
             <q-circular-progress
               show-value
               font-size="25px"
               :value="maximoDeProgresoCircular(defensaEspecialDelPokemon)"
               size="100px"
-              :thickness="0.22"
+              :thickness="0.23"
               color="light-blue"
               track-color="transparent"
               class="q-ma-md"
@@ -113,14 +114,14 @@
             </q-circular-progress>
           </div>
 
-          <div class="q-pa-md flex flex-center">
+          <div class="q-pa-md flex flex-center" v-show="velocidadDelPokemon">
             <h1>Velocidad: </h1>
             <q-circular-progress
               show-value
               font-size="25px"
               :value="maximoDeProgresoCircular(velocidadDelPokemon)"
               size="100px"
-              :thickness="0.22"
+              :thickness="0.23"
               color="light-blue"
               track-color="transparent"
               class="q-ma-md"
@@ -153,6 +154,10 @@ let defensaDelPokemon = ref("");
 let ataqueEspecialDelPokemon = ref("");
 let defensaEspecialDelPokemon = ref("");
 let velocidadDelPokemon = ref("");
+
+document.addEventListener("DOMContentLoaded", () => {
+  visibilidadDeLasEstadisticas();
+});
 
 async function traerInformacion() {
   try {
@@ -206,7 +211,7 @@ let colorSegunTipoDePokemon = {
   steel: "#9E9E9E",
   fairy: "#E91E63",
   fighting: "#FF5252",
-  normal: "#FFFFFF",
+  normal: "#CCCCCC",
   ice: "#03A9F4",
   flying: "#03A9F4"
 };
@@ -242,17 +247,27 @@ let cambiarColorSegunTipoDePokemonParaElBotonDelTipo = () => {
   document.querySelector('#cajaDelTipoDePokemon').style.backgroundColor = color;
 };
 
-
 let cambiarColorSegunTipo2DePokemonParaElBotonDelTipo = () => {
   let color = colorSegunTipoDePokemonParaElBotonDelTipo[categoria2DelPokemon.value];
   document.querySelector('#cajaDelTipo2DePokemon').style.backgroundColor = color;
 };
+
+let visibilidadDeLasEstadisticas = () => {
+  if (imgPokemon == "") {
+    document.querySelector('#contenedorEstadisticas').style.display = none;
+  } else{
+    document.querySelector('#contenedorEstadisticas').style.display = inline;
+  }
+}
+
+console.log(nombreDelPokemon);
 </script>
 
 <style>
+
 #fondo{
   width: 100%;
-  height: 100vh;
+  height: auto;
   position: fixed;
   top: 0px;
   right:0%;
@@ -283,7 +298,7 @@ let cambiarColorSegunTipo2DePokemonParaElBotonDelTipo = () => {
 }
 
 #buscador input:focus {
-  border-color: #1e90ff;
+  border-color: #0080ff;
 }
 
 #buscador button {
@@ -292,12 +307,12 @@ let cambiarColorSegunTipo2DePokemonParaElBotonDelTipo = () => {
   font-size: 1.3rem;
   padding: 0.8% 2%;
   cursor: pointer;
-  background-color: #fff;
+  background-color: #3387ad !important;
   transition: background-color 0.3s;
 }
 
 #buscador button:hover {
-  background-color: #f0f0f0;
+  background-color: red;
 }
 
 #cajaPrincipal {
@@ -318,6 +333,7 @@ text-transform: capitalize;
 font-size: 70px !important;
 position: relative;
 top: 90px;
+right: 200%;
 text-shadow: 
     -5px -1px 0 #000000,  
     1px -1px 0 #000000,
@@ -349,8 +365,8 @@ margin-right: 0%;
 
 #primeraLineaDeInformacion h2{
   position: relative;
-  bottom: -30%;
-  left: 0px;
+  bottom: 65%;
+  left: -180px;
   font-size: 55px !important;
 }
 
@@ -406,13 +422,17 @@ margin-right: 0%;
 }
 
 
-
 #cajaDelTipoDePokemon{
   border: 2px solid black;
   position: relative;
   font-size: 40px;
   border-radius: 50px;
   margin-bottom: 10px;
+  text-shadow: 
+    -2px -1px 0 #000000,  
+    1px -1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px 1px 0 #000000;  
 }
 
 #cajaDelTipo2DePokemon{
@@ -420,6 +440,13 @@ margin-right: 0%;
   position: relative;
   font-size: 40px ;
   border-radius: 50px;
+  margin-bottom: 10px;
+  text-shadow: 
+    -2px -1px 0 #000000,  
+    1px -1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px 1px 0 #000000;  
+
 }
 
 #nombreDelPokemon{
@@ -464,112 +491,282 @@ margin-right: 0%;
   box-shadow: 0 0 5px rgb(0, 0, 0); /* Borde externo */
 }
 
-/* Para pantallas entre 1809px y 2560px */
-@media screen and (max-width: 2560px) and (min-width: 1809px) {
-  #cajaPrincipal h1 {
-    font-size: 3rem;
+@media screen and (max-width: 1809px) and (min-width: 1024px) {
+  *{
+    gap: 0px;
+    margin: 0px;
+    padding: 0px;
   }
 
-  #cajaPrincipal h2 {
-    font-size: 2rem;
-  }
-
-  #fichaDelPokemon h1 {
-    font-size: 1.5rem;
-  }
-
-  #buscador input {
-    font-size: 1.5rem;
-    padding: 15px;
-  }
-
-  #buscador button {
-    font-size: 1.5rem;
-    padding: 15px 30px;
-  }
+body{
+  height: auto;
 }
 
-/* Para pantallas entre 1025px y 1809px */
-@media screen and (max-width: 1809px) and (min-width: 1025px) {
-  #cajaPrincipal h1 {
-    font-size: 2.5rem;
+  #contenedor{
+    width: 100%;
+    left: 0%;
   }
 
-  #cajaPrincipal h2 {
-    font-size: 1.8rem;
+  #primeraLineaDeInformacion h1{
+    position: static;
+    transform: translate(50%, 30%);
   }
 
-  #fichaDelPokemon h1 {
-    font-size: 1.2rem;
+  #categoriasDelPokemon{
+    position: static;
+    display: flex;
+    gap: 150%;
+    transform: translate(-150%, 50%);
+
   }
 
-  #buscador input {
-    font-size: 1.3rem;
-    padding: 12px;
+  #cajaDelTipoDePokemon{
+    padding-inline: 20%;
   }
 
-  #buscador button {
-    font-size: 1.3rem;
-    padding: 12px 25px;
+  #cajaDelTipo2DePokemon{
+    padding-inline: 20%;
+
+  }
+
+  #primeraLineaDeInformacion h2{
+    position: static;
+    transform: translate(70%, 50%);
+  }
+  
+  #cajaPrincipal img{
+    width: 90%;
+    transform: translate(50%, 0%);
+  }
+
+  #fichaDelPokemon{
+    display: block;
+    transform: translate(-45%, 200%);
+  }
+
+  #contenedorEstadisticas{
+    transform: translate(-15%, 150%);
+    position: relative;
+  }
+
+  #estadisticas{
+    grid-template-columns: repeat(3, 1fr);
+    bottom: 180px;
+    right: 95px;
+  }
+
+  .q-pa-md h1{
+    transform: translate(-60%, 10%);
   }
 }
 
 /* Para pantallas entre 768px y 1024px */
-@media screen and (max-width: 1024px) and (min-width: 768px) {
-  #cajaPrincipal h1 {
-    font-size: 2rem;
+@media screen and (max-width: 1024px) and (min-width: 800px) {
+
+  *{
+    gap: 0px;
+    margin: 0px;
+    padding: 0px;
   }
 
-  #cajaPrincipal h2 {
-    font-size: 1.5rem;
+body{
+  height: auto;
+}
+
+  #contenedor{
+    width: 100%;
+    left: 0%;
   }
 
-  #fichaDelPokemon h1 {
-    font-size: 1rem;
+  #primeraLineaDeInformacion h1{
+    position: static;
+    transform: translate(50%, 30%);
   }
 
-  #buscador input {
-    font-size: 1.2rem;
-    padding: 10px;
+  #categoriasDelPokemon{
+    position: static;
+    display: flex;
+    gap: 150%;
+    transform: translate(-150%, 50%);
+
   }
 
-  #buscador button {
-    font-size: 1.2rem;
-    padding: 10px 20px;
+  #cajaDelTipoDePokemon{
+    padding-inline: 20%;
+  }
+
+  #cajaDelTipo2DePokemon{
+    padding-inline: 20%;
+
+  }
+
+  #primeraLineaDeInformacion h2{
+    position: static;
+    transform: translate(70%, 50%);
   }
   
-  #estadisticas{
-    grid-template-columns: repeat(2, 1fr);
+  #cajaPrincipal img{
+    width: 90%;
+    transform: translate(50%, 0%);
+  }
 
+  #fichaDelPokemon{
+    display: block;
+    transform: translate(-45%, 200%);
+  }
+
+  #contenedorEstadisticas{
+    transform: translate(-15%, 150%);
+    position: relative;
+  }
+
+  #estadisticas{
+    grid-template-columns: repeat(3, 1fr);
+    bottom: 180px;
+    right: 95px;
+  }
+
+  .q-pa-md h1{
+    transform: translate(-60%, 10%);
   }
 }
 
-/* Para pantallas entre 460px y 767px */
-@media screen and (max-width: 767px) and (min-width: 460px) {
-  #cajaPrincipal h1 {
-    font-size: 1.5rem;
+@media screen and (max-width: 800px) and (min-width: 600px) {
+  *{
+    gap: 0px;
+    margin: 0px;
+    padding: 0px;
   }
 
-  #cajaPrincipal h2 {
-    font-size: 1.2rem;
+body{
+  height: auto;
+}
+
+  #contenedor{
+    width: 100%;
+    left: 0%;
   }
 
-  #fichaDelPokemon h1 {
-    font-size: 0.8rem;
+  #primeraLineaDeInformacion h1{
+    position: static;
+    transform: translate(50%, 30%);
   }
 
-  #buscador input {
-    font-size: 1rem;
-    padding: 8px;
+  #categoriasDelPokemon{
+    position: static;
+    display: flex;
+    gap: 150%;
+    transform: translate(-150%, 50%);
+
   }
 
-  #buscador button {
-    font-size: 1rem;
-    padding: 8px 15px;
+  #cajaDelTipoDePokemon{
+    padding-inline: 20%;
   }
+
+  #cajaDelTipo2DePokemon{
+    padding-inline: 20%;
+
+  }
+
+  #primeraLineaDeInformacion h2{
+    position: static;
+    transform: translate(70%, -50%);
+  }
+  
+  #cajaPrincipal img{
+    width: 90%;
+    transform: translate(50%, 0%);
+  }
+
+  #fichaDelPokemon{
+    display: block;
+    transform: translate(-45%, 200%);
+  }
+
+  #contenedorEstadisticas{
+    transform: translate(-15%, 150%);
+    position: relative;
+  }
+
   #estadisticas{
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    bottom: 180px;
+    right: 95px;
+  }
 
+  .q-pa-md h1{
+    transform: translate(-60%, 10%);
+  }
+}
+
+/* Para pantallas entre 400px y 767px */
+@media screen and (max-width: 600px) and (min-width: 400px) {
+  *{
+    gap: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+body{
+  height: auto;
+}
+
+  #contenedor{
+    width: 100%;
+    left: 0%;
+  }
+
+  #primeraLineaDeInformacion h1{
+    position: static;
+    transform: translate(50%, 30%);
+  }
+
+  #categoriasDelPokemon{
+    position: static;
+    display: flex;
+    gap: 150%;
+    transform: translate(-150%, 50%);
+
+  }
+
+  #cajaDelTipoDePokemon{
+    padding-inline: 20%;
+  }
+
+  #cajaDelTipo2DePokemon{
+    padding-inline: 20%;
+
+  }
+
+  #primeraLineaDeInformacion h2{
+    position: static;
+    transform: translate(70%, 50%);
+  }
+  
+  #cajaPrincipal img{
+    width: 90%;
+    transform: translate(50%, 0%);
+  }
+
+  #fichaDelPokemon{
+    display: block;
+    transform: translate(-45%, 200%);
+  }
+
+  #contenedorEstadisticas{
+    transform: translate(-15%, 150%);
+    position: relative;
+  }
+
+  #estadisticas{
+    grid-template-columns: repeat(2, 1fr);
+    bottom: 180px;
+    right: 95px;
+  }
+
+  .q-pa-md h1{
+    transform: translate(-60%, 10%);
   }
 }
 </style>
