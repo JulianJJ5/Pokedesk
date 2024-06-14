@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="todoElContenido">
     <img src="./../imagenes/fondo_pokemon.jpg" alt="background image" id="fondo" >
     <div id="contenedor">
       <div id="buscador">
@@ -7,7 +7,7 @@
         <button @click="traerInformacion">Buscar</button>
       </div>
 
-      <div id="cajaPrincipal">
+      <div id="cajaPrincipal" v-show="visibilidad">
         <div id="primeraLineaDeInformacion">
     <div id="nombreDelPokemon"><h1 v-show="nombreDelPokemon">{{ nombreDelPokemon }}</h1>
 </div>
@@ -141,6 +141,7 @@ import axios from "axios";
 import { ref } from "vue";
 
 let id = ref("");
+let visibilidad = ref(false)
 let imgPokemon = ref("");
 let numeroPokemon = ref("");
 let nombreDelPokemon = ref("");
@@ -163,6 +164,7 @@ async function traerInformacion() {
   try {
     let url = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id.value}`);
     let data = url.data;
+    visibilidad.value=true
     imgPokemon.value = data.sprites.other["official-artwork"].front_default;
     nombreDelPokemon.value = data.species.name;
     numeroPokemon.value = data.id;
@@ -180,6 +182,8 @@ async function traerInformacion() {
     ataqueEspecialDelPokemon.value = data.stats[3].base_stat;
     defensaEspecialDelPokemon.value = data.stats[4].base_stat;
     velocidadDelPokemon.value = data.stats[5].base_stat;
+
+
   
     document.getElementById("fondo").style.display = "none";
     cambiarColorDelBodySegunTipoDePokemon();
@@ -276,7 +280,7 @@ console.log(nombreDelPokemon);
 #contenedor {
   align-items: center;
   position: relative;
-  height: 110vh;
+  
 }
 
 #buscador {
@@ -286,10 +290,11 @@ console.log(nombreDelPokemon);
   gap: 3%;
   margin-bottom: 20px;
   padding-bottom: 2%;
+  transform: translate(0%, 50%);
 }
 
 #buscador input {
-  width: 40%;
+  width: 100%;
   border: 2px solid #000;
   border-radius: 20px;
   font-size: 1.3rem;
@@ -491,7 +496,53 @@ margin-right: 0%;
   box-shadow: 0 0 5px rgb(0, 0, 0); /* Borde externo */
 }
 
-@media screen and (max-width: 1809px) and (min-width: 1024px) {
+@media screen and (max-width: 2300px) and (min-width: 1850px) {
+ #contenedor{
+    width: 100%;
+    left: 0%;
+    height: 95vh;
+  }
+
+  #primeraLineaDeInformacion h1{
+    position: static;
+    transform: translate(-10%, 30%);
+  }
+
+  #categoriasDelPokemon{
+    position: static;
+    display: flex;
+    gap: 150%;
+    transform: translate(-150%, 0%);
+
+  }
+
+  #cajaDelTipoDePokemon{
+    padding-inline: 20%;
+  }
+
+  #cajaDelTipo2DePokemon{
+    padding-inline: 20%;
+    transform: translate(-90%, 0%);
+
+  }
+
+  #primeraLineaDeInformacion h2{
+    position: static;
+    transform: translate(150%, -340%);
+  }
+  
+  #cajaPrincipal{
+    transform: translate(0%, 0%);
+    width: 80%;
+  }
+
+  #cajaPrincipal img{
+    width: 60%;
+    transform: translate(30%, -20%);
+  }
+}
+
+@media screen and (max-width: 1850px) and (min-width: 1500px) {
   *{
     gap: 0px;
     margin: 0px;
@@ -505,11 +556,173 @@ body{
   #contenedor{
     width: 100%;
     left: 0%;
+    height: 90vh;
   }
 
   #primeraLineaDeInformacion h1{
     position: static;
-    transform: translate(50%, 30%);
+    transform: translate(-10%, 60%);
+  }
+
+  #categoriasDelPokemon{
+    position: static;
+    display: flex;
+    gap: 150%;
+    transform: translate(-150%, 50%);
+
+  }
+
+  #cajaDelTipoDePokemon{
+    padding-inline: 20%;
+  }
+
+  #cajaDelTipo2DePokemon{
+    padding-inline: 20%;
+    transform: translate(-90%, 0%);
+
+  }
+
+  #primeraLineaDeInformacion h2{
+    position: static;
+    transform: translate(150%, -150%);
+  }
+  
+  #cajaPrincipal{
+    transform: translate(0%, 0%);
+    width: 80%;
+  }
+
+  #cajaPrincipal img{
+    width: 45%;
+    transform: translate(30%, -20%);
+  }
+
+  #fichaDelPokemon{
+    display: block;
+    transform: translate(-125%, 110%);
+  }
+
+  #contenedorEstadisticas{
+    transform: translate(10%, 24%);
+    position: relative;
+  }
+
+  #estadisticas{
+    grid-template-columns: repeat(3, 1fr);
+    transform: translate(-10%, 60%);
+    bottom: 180px;
+    right: 95px;
+  }
+
+  .q-pa-md h1{
+    transform: translate(-60%, 10%);
+  }
+}
+
+@media screen and (max-width: 1500px) and (min-width: 1200px) {
+  *{
+    gap: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+body{
+  height: auto;
+  overflow: hidden;
+}
+
+  #contenedor{
+    width: 100%;
+    left: 0%;
+    height: 90vh;
+  }
+
+  #buscador{
+    transform: translate(0%, 0%);
+  }
+
+  #primeraLineaDeInformacion h1{
+    position: static;
+    transform: translate(-10%, 10%);
+  }
+
+  #categoriasDelPokemon{
+    position: static;
+    display: flex;
+    gap: 150%;
+    transform: translate(-150%, 50%);
+
+  }
+
+  #cajaDelTipoDePokemon{
+    padding-inline: 20%;
+  }
+
+  #cajaDelTipo2DePokemon{
+    padding-inline: 20%;
+    transform: translate(-90%, 0%);
+
+  }
+
+  #primeraLineaDeInformacion h2{
+    position: static;
+    transform: translate(100%, -220%);
+  }
+  
+  #cajaPrincipal{
+    transform: translate(0%, 0%);
+    pointer-events: none;
+    height: 90vh;
+  }
+
+  #cajaPrincipal img{
+    width: 45%;
+    transform: translate(30%, -15%);
+    height: 70vh;
+  }
+
+  #fichaDelPokemon{
+    display: flex;
+    transform: translate(0%, 250%);
+  }
+
+  #contenedorEstadisticas{
+    transform: translate(7%, 55%);
+    position: relative;
+  }
+
+  #estadisticas{
+    grid-template-columns: repeat(3, 1fr);
+    transform: translate(13%, 43%);
+    bottom: 180px;
+    right: 95px;
+  }
+
+  .q-pa-md h1{
+    transform: translate(-60%, 10%);
+  }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 1024px) {
+  *{
+    gap: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+body{
+  height: auto;
+}
+
+  #contenedor{
+    width: 100%;
+    left: 0%;
+    height: 95vh;
+  }
+
+  #primeraLineaDeInformacion h1{
+    position: static;
+    transform: translate(-10%, 30%);
   }
 
   #categoriasDelPokemon{
@@ -531,26 +744,31 @@ body{
 
   #primeraLineaDeInformacion h2{
     position: static;
-    transform: translate(70%, 50%);
+    transform: translate(140%, -190%);
   }
   
+  #cajaPrincipal{
+    transform: translate(-10%, 0%);
+  }
+
   #cajaPrincipal img{
-    width: 90%;
-    transform: translate(50%, 0%);
+    width: 60%;
+    transform: translate(30%, -20%);
   }
 
   #fichaDelPokemon{
     display: block;
-    transform: translate(-45%, 200%);
+    transform: translate(-100%, 80%);
   }
 
   #contenedorEstadisticas{
-    transform: translate(-15%, 150%);
+    transform: translate(8%, 24%);
     position: relative;
   }
 
   #estadisticas{
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    transform: translate(15%, 30%);
     bottom: 180px;
     right: 95px;
   }
@@ -575,12 +793,13 @@ body{
 
   #contenedor{
     width: 100%;
-    left: 0%;
+    left: -10%;
+    height: 120vh;
   }
 
   #primeraLineaDeInformacion h1{
     position: static;
-    transform: translate(50%, 30%);
+    transform: translate(50%, 60%);
   }
 
   #categoriasDelPokemon{
@@ -593,35 +812,37 @@ body{
 
   #cajaDelTipoDePokemon{
     padding-inline: 20%;
+    transform: translate(50%, 10%);
   }
 
   #cajaDelTipo2DePokemon{
     padding-inline: 20%;
-
+    transform: translate(50%, 10%);
   }
 
   #primeraLineaDeInformacion h2{
     position: static;
-    transform: translate(70%, 50%);
+    transform: translate(220%, -150%);
   }
   
   #cajaPrincipal img{
-    width: 90%;
-    transform: translate(50%, 0%);
+    width: 50%;
+    transform: translate(40%, -20%);
   }
 
   #fichaDelPokemon{
     display: block;
-    transform: translate(-45%, 200%);
+    transform: translate(0%, -110%);
   }
 
   #contenedorEstadisticas{
-    transform: translate(-15%, 150%);
+    transform: translate(-30%, 150%);
     position: relative;
   }
 
   #estadisticas{
     grid-template-columns: repeat(3, 1fr);
+    transform: translate(15%, 25%);
     bottom: 180px;
     right: 95px;
   }
@@ -644,12 +865,13 @@ body{
 
   #contenedor{
     width: 100%;
-    left: 0%;
+    left: -10%;
+    height: 140vh;
   }
 
   #primeraLineaDeInformacion h1{
     position: static;
-    transform: translate(50%, 30%);
+    transform: translate(40%, 50%);
   }
 
   #categoriasDelPokemon{
@@ -662,35 +884,37 @@ body{
 
   #cajaDelTipoDePokemon{
     padding-inline: 20%;
+    transform: translate(50%, -10%);
   }
 
   #cajaDelTipo2DePokemon{
     padding-inline: 20%;
+        transform: translate(50%, -10%);
 
   }
 
   #primeraLineaDeInformacion h2{
     position: static;
-    transform: translate(70%, -50%);
+    transform: translate(280%, -160%);
   }
   
   #cajaPrincipal img{
     width: 90%;
-    transform: translate(50%, 0%);
+    transform: translate(45%, -20%);
   }
 
   #fichaDelPokemon{
     display: block;
-    transform: translate(-45%, 200%);
+    transform: translate(-45%, 10%);
   }
 
   #contenedorEstadisticas{
-    transform: translate(-15%, 150%);
+    transform: translate(-15%, 180%);
     position: relative;
   }
 
   #estadisticas{
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     bottom: 180px;
     right: 95px;
   }
@@ -714,12 +938,12 @@ body{
 
   #contenedor{
     width: 100%;
-    left: 0%;
+    left: -10%;
   }
 
   #primeraLineaDeInformacion h1{
     position: static;
-    transform: translate(50%, 30%);
+    transform: translate(50%, 60%);
   }
 
   #categoriasDelPokemon{
@@ -741,7 +965,7 @@ body{
 
   #primeraLineaDeInformacion h2{
     position: static;
-    transform: translate(70%, 50%);
+    transform: translate(50%, 50%);
   }
   
   #cajaPrincipal img{
@@ -751,16 +975,18 @@ body{
 
   #fichaDelPokemon{
     display: block;
-    transform: translate(-45%, 200%);
+    transform: translate(-50%, 180%);
+    white-space: nowrap;
   }
 
   #contenedorEstadisticas{
-    transform: translate(-15%, 150%);
+    transform: translate(-30%, 115%);
     position: relative;
   }
 
   #estadisticas{
     grid-template-columns: repeat(2, 1fr);
+    transform: translate(15%, 30%);
     bottom: 180px;
     right: 95px;
   }
